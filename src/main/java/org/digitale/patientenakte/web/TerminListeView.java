@@ -52,7 +52,7 @@ public class TerminListeView extends Main {
 				.setWeekdays(List.of("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"));
 		germanDatePicker.setWeekdaysShort(List.of("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"));
 		germanDatePicker.setToday("Heute");
-		germanDatePicker.setCancel("Stop");
+		germanDatePicker.setCancel("Abbrechen");
 
 		datePicker.setI18n(germanDatePicker);
 
