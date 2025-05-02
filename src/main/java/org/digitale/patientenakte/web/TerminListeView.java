@@ -52,7 +52,7 @@ public class TerminListeView extends Main {
 				.setWeekdays(List.of("Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"));
 		germanDatePicker.setWeekdaysShort(List.of("So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"));
 		germanDatePicker.setToday("Heute");
-		germanDatePicker.setCancel("Abbrechen");
+		germanDatePicker.setCancel("Stop");
 
 		datePicker.setI18n(germanDatePicker);
 
@@ -65,6 +65,7 @@ public class TerminListeView extends Main {
 		
 		//TODO Binder einfügen und die variablen datePicker an Termin.datum und ...combo an 
 		binder.bind(behandelndeAerzteComboBox, Termin::getBehandelnderArzt, Termin::setBehandelnderArzt);
+		
 
 		// Bei Auswahl des Buttons wird event ausgeführt (Methodenaufruf von
 		// terminAnlegen())
