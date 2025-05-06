@@ -1,20 +1,15 @@
 package org.digitale.patientenakte.web;
 
-import java.util.Objects;
+import java.util.Optional;
 
 import org.digitale.patientenakte.web.arztmanagement.Arzt;
 import org.digitale.patientenakte.web.arztmanagement.ArztSteuerung;
 import org.digitale.patientenakte.web.arztmanagement.Fachrichtungen;
 
-import com.google.common.base.Optional;
-import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.grid.GridMultiSelectionModel;
-import com.vaadin.flow.component.grid.GridSingleSelectionModel;
-import com.vaadin.flow.component.grid.ItemClickEvent;
 import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.icon.Icon;
@@ -25,12 +20,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.selection.MultiSelectionListener;
-import com.vaadin.flow.data.selection.SelectionListener;
-import com.vaadin.flow.data.selection.SingleSelectionListener;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.shared.Registration;
 
 //Landing Page
 @Route(" ")
@@ -49,10 +40,9 @@ public class ArztListeView extends Main {
 
 	// Button um Arzt zu erstellen
 	private final Button arztSpeichernBtn;
-	private final Button arztAnlegenBtn;
+	// private final Button arztAnlegenBtn;
 
 	// Überprüfung ob column angeklickt wurde
-	boolean columnClicked = false;
 	private Arzt gewaehlterArzt = null;
 
 	// Konstruktor in dem die felder und das grid gesetzt werden
@@ -99,66 +89,61 @@ public class ArztListeView extends Main {
 		arztGrid.setItems(ArztSteuerung.getAerzte());
 		arztGrid.setSizeFull();
 		arztGrid.setEmptyStateText("Keine Ärzte gefunden.");
-		
+
 		// Bei Auswahl des Buttons wird event ausgeführt (Methodenaufruf von
 		// arztAnlegen() s.u.)
-		// TODO je nachdem, ob columClicke true oder false arzt neu anlegen oder arzt
-		// bearbeiten
 		arztSpeichernBtn = new Button("Arzt hinzufügen", click -> {
-			if (columnClicked) {
-				// TODO arztSpeichern/beabfeiten()
-				arztBearbeiten(gewaehlterArzt);
+			if (gewaehlterArzt != null) {
+				arztBearbeiten();
 			} else {
 				arztAnlegen();
-				// TODO button text ändern?
 			}
 		});
 		arztSpeichernBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-		
-		//Button für arzt anlegen 
-		//immer erstmal alle felder clearen 
-		//gewaehlter arzt null setzen 
-		arztAnlegenBtn = new Button("Neuen Arzt anlegen", click ->{
-			arztAnlegen();
-		});
-		arztAnlegenBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-		// TODO Event/Listener, der click in grid erkennt und felder befüllt
 		// vaadin grid doku single selection
 		// selection mode des grids auf single rows setzen( multi wäre mehrere zeilen
 		// auswählbar)
-		arztGrid.setSelectionMode(SelectionMode.SINGLE);
+		arztGrid.setSelectionMode(SelectionMode.SINGLE);// sicherstellen, dass nur eine Zeile geklickt werden kann
+		// valueCHangeListener --> reagiert auf Änderung des Arztes
 
-		arztGrid.addItemClickListener(clickColumn -> {
+		arztGrid.addSelectionListener(selection -> {
+			Optional<Arzt> optionalArzt = selection.getFirstSelectedItem(); // bildet alle Zustände ab
+																			// (anwählen/abwählen)
+			// Selection repäräsentiert null oder angewähltes Objekt
+			// Optional hilft bei Arbeit mit null --> zwingt consumer von Methode mit Null
+			// handling besser umzugehen
+			// true -> arzt ist angewählt
+			if (optionalArzt.isPresent()) {
+				gewaehlterArzt = optionalArzt.get();
+				// text vom button ändern sobald columg geklickt wurde
+				arztSpeichernBtn.setText("Arzt speichern");
 
-			// im grid ausgewählten Arzt abspeichern
-			Arzt clickedArzt = clickColumn.getItem();
-			Notification.show("Zeile geklickt!", 3000, Notification.Position.TOP_CENTER)
-					.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-			// boolean, dass column geklickt wurde auf true setzen
-			columnClicked = true;
-			arztSpeichernBtn.setText("Arzt speichern");
+				// Felder befüllen mit Infos des ausgewählten Arztes
+				vornameField.setValue(gewaehlterArzt.getVorname());
+				nachnameField.setValue(gewaehlterArzt.getNachname());
+				fachrichtungComboBox.setValue(gewaehlterArzt.getFachrichtung());
 
-			// Felder befüllen mit Infos des ausgewählten Arztes
-			vornameField.setValue(clickedArzt.getVorname());
-			nachnameField.setValue(clickedArzt.getNachname());
-			fachrichtungComboBox.setValue(clickedArzt.getFachrichtung());
-			// gewaehlten Arzt auf den angeklickten Arzt setzen, damit damit die
-			// arztBearbeiten Method eim Nutto aufgerufen werden kann
-			gewaehlterArzt = clickedArzt;
-			;
+				// keine zeile wurde angewählt egal was davor angewählt war
+			} else {
+				gewaehlterArzt = null;
 
+				// Felder leeren
+				vornameField.clear();
+				nachnameField.clear();
+				fachrichtungComboBox.clear();
+				arztSpeichernBtn.setText("Neuen Arzt anlegen");
+
+			}
 		});
-
-
 
 		// layout anlegen
 		setSizeFull();
 		VerticalLayout content = new VerticalLayout();
 		HorizontalLayout arztErfassenLayout = new HorizontalLayout();
-		arztErfassenLayout.add(vornameField, nachnameField, fachrichtungComboBox, arztSpeichernBtn, arztAnlegenBtn);
+		arztErfassenLayout.add(vornameField, nachnameField, fachrichtungComboBox, arztSpeichernBtn);
 		// default wäre oben alignen
-		arztErfassenLayout.setAlignSelf(FlexComponent.Alignment.END, arztSpeichernBtn, arztAnlegenBtn);
+		arztErfassenLayout.setAlignSelf(FlexComponent.Alignment.END, arztSpeichernBtn);
 		content.add(arztErfassenLayout, arztGrid);
 		content.setSizeFull();
 		add(content);
@@ -184,27 +169,20 @@ public class ArztListeView extends Main {
 	}
 
 	// Methode um Arzt zu bearbeiten
-	private void arztBearbeiten(Arzt zuBearbeitenderArzt) {
+	private void arztBearbeiten() {
 		// Infos zu Arzt Änderung aus Nutzereingabe einholen
 		String vorname = vornameField.getValue();
 		String nachname = nachnameField.getValue();
 		Fachrichtungen fachrichtung = fachrichtungComboBox.getValue();
 
-		ArztSteuerung.arztBearbeiten(zuBearbeitenderArzt, vorname, nachname, fachrichtung);
+		ArztSteuerung.arztBearbeiten(gewaehlterArzt, vorname, nachname, fachrichtung);
 
 		// Um Änderungen am Grid sofort sichtbar zu machen (also bearbeiteten Arzt
 		// sofort anzeigen)
 		arztGrid.getDataProvider().refreshAll();
-
-		// EIngabefelder wieder leeren
-		vornameField.clear();
-		nachnameField.clear();
-		fachrichtungComboBox.clear();
-		arztSpeichernBtn.setText("Neuen Arzt anlegen");
-
-		// boolean der gewählten column auf false (keine column gewählt)
-		columnClicked = false;
-		zuBearbeitenderArzt =null;
+		// gewählte Zeile "abwählen" --> springt in selectionListener und cleared dort
+		// InputFelder und setzt arzt null
+		arztGrid.deselectAll();
 
 	}
 }
