@@ -66,6 +66,7 @@ public class TerminListeView extends Main {
 		//TODO Binder einfügen und die variablen datePicker an Termin.datum und ...combo an 
 		binder.bind(behandelndeAerzteComboBox, Termin::getBehandelnderArzt, Termin::setBehandelnderArzt);
 		
+		
 
 		// Bei Auswahl des Buttons wird event ausgeführt (Methodenaufruf von
 		// terminAnlegen())
