@@ -1,31 +1,42 @@
 package org.digitale.patientenakte.web.arztmanagement;
 
+import jakarta.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
-public class Termin {
+@Entity
+@Table(name = "TERMIN")
+public class Termin implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	//@ManyToOne
+	//@JoinColumn(name = "ARZT_ID") // Fremdschlüssel zur Arzt-Tabelle
+	@Column(name="BEHANDELNDER ARZT")
 	private Arzt behandelnderArzt;
-	//private Date date;
+
+	@Column(name = "DATUM")
 	private LocalDate datum;
-	
-	public LocalDate getLocalDate() {
-		return datum;
+
+	// Konstruktoren
+	public Termin() {
 	}
 
-	public void setLocalDate(LocalDate datum) {
+	public Termin(Arzt behandelnderArzt, LocalDate datum) {
+		this.behandelnderArzt = behandelnderArzt;
 		this.datum = datum;
 	}
 
-	private int id;
-
-	static int idCounter = 0;
-
-	public int getId() {
+	// Getter und Setter
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -37,16 +48,11 @@ public class Termin {
 		this.behandelnderArzt = behandelnderArzt;
 	}
 
+	public LocalDate getDatum() {
+		return datum;
+	}
 
-	public Termin(Arzt behandelnderArzt, LocalDate datum) {
-		this.behandelnderArzt = behandelnderArzt;
+	public void setDatum(LocalDate datum) {
 		this.datum = datum;
-		this.id = ++idCounter;
 	}
-
-	public Termin() {
-		this.id = ++idCounter;
-		// TODO Auto-generated constructor stub
-	}
-
 }
