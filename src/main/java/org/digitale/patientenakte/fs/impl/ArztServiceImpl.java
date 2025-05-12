@@ -1,9 +1,12 @@
-package org.digitale.patientenakte.web.arztmanagement;
+package org.digitale.patientenakte.fs.impl;
 
 import java.util.List;
 
-import org.digitale.patientenakte.web.ArztRepository;
-import org.digitale.patientenakte.web.TerminRepository;
+import org.digitale.patientenakte.fo.Arzt;
+import org.digitale.patientenakte.fo.ArztRepository;
+import org.digitale.patientenakte.fo.Termin;
+import org.digitale.patientenakte.fs.ArztService;
+import org.digitale.patientenakte.fs.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Service;
 //d.h. static nicht mehr nötig und keine new ArztSteuerung zB , d.h. auch zB für repo kann ich dann @AutoWired nutzen, um sie nicht immer mit new anzulegen (Kombi dann möglich)
 
 @Service
-public class ArztService {
+public class ArztServiceImpl implements ArztService{
 
 	// Für den Datenbankzugriff
 	@Autowired

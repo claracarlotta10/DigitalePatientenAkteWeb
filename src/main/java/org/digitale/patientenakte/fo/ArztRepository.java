@@ -1,10 +1,6 @@
-package org.digitale.patientenakte.web;
+package org.digitale.patientenakte.fo;
 
-import java.util.List;
-
-import org.digitale.patientenakte.web.arztmanagement.Arzt;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 //<zu speichernde Objekttyp = arzt, zu speichernde typ seiner eindeutige id = long>
 //Von ebene her gehören sie zu BO --> Datnebankkommunikation

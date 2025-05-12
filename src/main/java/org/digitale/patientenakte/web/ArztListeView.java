@@ -2,9 +2,9 @@ package org.digitale.patientenakte.web;
 
 import java.util.Optional;
 
-import org.digitale.patientenakte.web.arztmanagement.Arzt;
-import org.digitale.patientenakte.web.arztmanagement.ArztService;
-import org.digitale.patientenakte.web.arztmanagement.Fachrichtungen;
+import org.digitale.patientenakte.fo.Arzt;
+import org.digitale.patientenakte.fo.client.Fachrichtungen;
+import org.digitale.patientenakte.fs.ArztService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
@@ -15,8 +15,6 @@ import com.vaadin.flow.component.grid.Grid.SelectionMode;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

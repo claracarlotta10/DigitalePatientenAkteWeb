@@ -1,7 +1,9 @@
-package org.digitale.patientenakte.web.arztmanagement;
+package org.digitale.patientenakte.fo;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import org.digitale.patientenakte.fo.client.Fachrichtungen;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -1,4 +1,4 @@
-package org.digitale.patientenakte.web.arztmanagement;
+package org.digitale.patientenakte.fo;
 
 import jakarta.persistence.*;
 import java.io.Serializable;

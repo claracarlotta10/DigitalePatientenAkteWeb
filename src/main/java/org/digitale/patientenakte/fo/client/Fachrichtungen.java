@@ -1,6 +1,6 @@
-package org.digitale.patientenakte.web.arztmanagement;
+package org.digitale.patientenakte.fo.client;
 
-
+import org.digitale.patientenakte.fo.Arzt;
 
 public enum Fachrichtungen {
 	KARDIOLOGIE("Kardiologie"), UROLOGIE("Urologie"), INNERE_MEDIZIN("Innere Medizin"), KINDERARZT("Kinderarzt");

@@ -2,10 +2,10 @@ package org.digitale.patientenakte.web;
 
 import java.util.Optional;
 
-import org.digitale.patientenakte.web.arztmanagement.Arzt;
-import org.digitale.patientenakte.web.arztmanagement.ArztService;
-import org.digitale.patientenakte.web.arztmanagement.Termin;
-import org.digitale.patientenakte.web.arztmanagement.TerminService;
+import org.digitale.patientenakte.fo.Arzt;
+import org.digitale.patientenakte.fo.Termin;
+import org.digitale.patientenakte.fs.ArztService;
+import org.digitale.patientenakte.fs.TerminService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.flow.component.button.Button;
@@ -38,8 +38,7 @@ public class TerminListeView extends Main {
 	// Variablen des Termins als Felder sowie button um Termine zu erstellen
 	private ComboBox<Arzt> behandelndeAerzteComboBox;
 	private DatePicker datePicker;
-	
-	
+
 	private Button terminAnlegenBtn;
 	private BeanValidationBinder<Termin> binderTermin;
 
@@ -53,7 +52,7 @@ public class TerminListeView extends Main {
 	// Lifecycle scope beachten
 	public TerminListeView() {
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		// Datumsauswahl aus Kalender
@@ -70,15 +69,15 @@ public class TerminListeView extends Main {
 		// für jeden arzt den nachnamen anzeigen lassen und dr. davor hängen
 		behandelndeAerzteComboBox.setItemLabelGenerator(arzt -> "DR. " + arzt.getNachname());
 
-		//Binder konfiguration
+		// Binder konfiguration
 		binderTermin = new BeanValidationBinder<Termin>(Termin.class);
 		binderTermin.forField(behandelndeAerzteComboBox).asRequired().bind(Termin::getBehandelnderArzt,
 				Termin::setBehandelnderArzt);
 		binderTermin.forField(datePicker).asRequired().bind(Termin::getDatum, Termin::setDatum);
-		
-		//Start initalisierung als leerer Termin
+
+		// Start initalisierung als leerer Termin
 		binderTermin.setBean(new Termin());
-		
+
 		// reagiert immer wenn sich bean (also Termin) im hintergrunf ändert
 		// prüft mit isValid, ob gesamter termin valide ist
 		// button erst enebled wenn alle eingaben valide sind als kombi
@@ -86,7 +85,7 @@ public class TerminListeView extends Main {
 			terminAnlegenBtn.setEnabled(binderTermin.isValid());
 		});
 
-		//Termin Liste/Grid anlegen
+		// Termin Liste/Grid anlegen
 		terminGrid = new Grid<>(Termin.class, false);
 
 		// Für jeden Termin das datum und die id ermitteln und mit Überschriften zu Grid
@@ -95,17 +94,17 @@ public class TerminListeView extends Main {
 		terminGrid.addColumn(termin -> termin.getId()).setHeader("Termin ID");
 		// zeige für jeden termin den zugehörigen behnandelnden arzt an
 		terminGrid.addColumn(termin -> termin.getBehandelnderArzt().getNachname()).setHeader("Behandelnder Arzt");
-		
-		terminGrid.addComponentColumn(termin ->{
-			Button terminLoeschen = new Button (new Icon(VaadinIcon.TRASH));
-			terminLoeschen.addClickListener(clicke ->{
+
+		terminGrid.addComponentColumn(termin -> {
+			Button terminLoeschen = new Button(new Icon(VaadinIcon.TRASH));
+			terminLoeschen.addClickListener(clicke -> {
 				terminService.terminLoeschen(termin);
 				terminGrid.setItems(terminService.ladeTermine());
 			});
 			return terminLoeschen;
 		}).setHeader("Termin entfenren");
-		
-		 // grid mit terminen befüllen
+
+		// grid mit terminen befüllen
 		terminGrid.setItems(terminService.ladeTermine());
 		terminGrid.setSizeFull();
 		// Platzhalter, wenn liste leer
@@ -183,7 +182,6 @@ public class TerminListeView extends Main {
 		terminGrid.getDataProvider().refreshAll();
 
 		// Um Änderungen am Grid sofort sichtbar zu machen (also neu hinzugefügten
-
 
 		Notification.show("Termin erfolgreich hinzugefügt!", 3000, Notification.Position.BOTTOM_END)
 				.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
