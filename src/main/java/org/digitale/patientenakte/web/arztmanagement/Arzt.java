@@ -1,6 +1,7 @@
 package org.digitale.patientenakte.web.arztmanagement;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +22,6 @@ public class Arzt implements Serializable{
 	@Id
 	@Column(name="ARZT_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//TODO Generatedvaluetsrategy mit h2 --> auto generieren der ID
 	private Long id;
 	// Instanzvariablen
 	@Column(name="VORNAME") //Spalten in Tabelle anlegen
@@ -68,6 +68,23 @@ public class Arzt implements Serializable{
 
 	public String getVorname() {
 		return vorname;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Arzt other = (Arzt) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }
