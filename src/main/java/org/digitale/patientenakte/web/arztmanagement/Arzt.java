@@ -19,7 +19,7 @@ public class Arzt implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="ID")
+	@Column(name="ARZT_ID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	//TODO Generatedvaluetsrategy mit h2 --> auto generieren der ID
 	private Long id;

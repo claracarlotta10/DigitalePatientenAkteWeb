@@ -23,6 +23,7 @@ public class ArztService {
 	// Für den Datenbankzugriff
 	@Autowired
 	private ArztRepository arztRepo;
+	@Autowired
 	private TerminService terminService;
 
 	// Liste von aerzten anlegen, damit zB TerminSteuerung Zugriff hat

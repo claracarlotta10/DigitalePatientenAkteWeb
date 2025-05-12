@@ -12,11 +12,12 @@ public class Termin implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="ID")
 	private Long id;
 
-	//@ManyToOne
-	//@JoinColumn(name = "ARZT_ID") // Fremdschlüssel zur Arzt-Tabelle
-	@Column(name="BEHANDELNDER ARZT")
+	@ManyToOne
+	@JoinColumn(name = "ARZT_ID") // Fremdschlüssel zur Arzt-Tabelle
+	//@Column(name="BEHANDELNDER ARZT")
 	private Arzt behandelnderArzt;
 
 	@Column(name = "DATUM")
